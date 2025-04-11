@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #ffe6e6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            justify-content: center;
+        }
+        .dashboard-container {
+            width: 850px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            padding: 40px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .dashboard-header {
+            margin-bottom: 20px;
+        }
+        .dashboard-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #b71c1c;
+            text-transform: uppercase;
+        }
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 100%;
+            justify-content: center;
+        }
+        .stat-card {
+            background-color: #ffcccc;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s, background 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 120px;
+            text-decoration: none;
+            color: inherit;
+            font-size: 18px;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background-color: #ff9999;
+        }
+        .stat-icon {
+            font-size: 35px;
+            color: #d32f2f;
+            margin-bottom: 8px;
+        }
+        .logout-btn {
+            margin-top: 30px;
+            background-color: #b71c1c;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        .logout-btn:hover {
+            background-color: #7f0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <div class="dashboard-title">DASHBOARD</div>
+        </div>
+        <div class="dashboard-stats">
+            <a href="{{ url_for('donors') }}" class="stat-card">
+                <div class="stat-icon">&#128100;</div>
+                <h3>Donors</h3>
+            </a>
+            <a href="{{ url_for('blood_requests') }}" class="stat-card">
+                <div class="stat-icon">&#129656;</div>
+                <h3>Blood Requests</h3>
+            </a>
+            <a href="{{ url_for('add_handed_over') }}" class="stat-card">
+                <div class="stat-icon">&#129309;</div>
+                <h3>Handed Over</h3>
+            </a>
+            
+            
+            <a href="{{ url_for('receipt_page') }}" class="stat-card">
+                <div class="stat-icon">&#128196;</div>
+                <h3>Receipt</h3>
+            </a>
+        </div>
+        <form action="{{ url_for('logout') }}" method="POST">
+            <button class="logout-btn" type="submit">Logout</button>
+        </form>
+    </div>
+</body>
+</html>
