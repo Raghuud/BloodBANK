@@ -2,32 +2,22 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'blood-bank-system'
-        CONTAINER_NAME = 'blood-bank-container'
-        HOST_PORT = '5018'
-        CONTAINER_PORT = '5000'
+        IMAGE_NAME = "bloodbank_app"
+        CONTAINER_NAME = "bloodbank_container"
     }
 
     stages {
-        stage('Clone Repo') {
+        stage('Clone Repository') {
             steps {
-                echo 'Cloning repository...'
+                git branch: 'main', url: 'https://github.com/Raghuud/BloodBANK.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
+                    sh 'docker version'  // To verify Docker is accessible
                     sh "docker build -t $IMAGE_NAME ."
-                }
-            }
-        }
-
-        stage('Stop & Remove Old Container') {
-            steps {
-                script {
-                    sh "docker stop $CONTAINER_NAME || true"
-                    sh "docker rm $CONTAINER_NAME || true"
                 }
             }
         }
@@ -35,20 +25,12 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    sh """
-                        docker run -d \
-                        --name $CONTAINER_NAME \
-                        -p $HOST_PORT:$CONTAINER_PORT \
-                        $IMAGE_NAME
-                    """
+                    // Stop and remove existing container if any
+                    sh "docker rm -f $CONTAINER_NAME || true"
+                    // Run container
+                    sh "docker run -d -p 5000:5000 --name $CONTAINER_NAME $IMAGE_NAME"
                 }
             }
-        }
-    }
-
-    post {
-        always {
-            echo 'Pipeline completed.'
         }
     }
 }

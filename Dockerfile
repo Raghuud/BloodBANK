@@ -1,5 +1,7 @@
-# Use a lightweight Python image
-FROM python:3.10-slim
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PythonUNBUFFERED=1
 
 # Set working directory in the container
 WORKDIR /app
