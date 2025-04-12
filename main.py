@@ -1,14 +1,7 @@
-<<<<<<< HEAD
-from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file # type: ignore
+from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file
 import sqlite3
 from io import BytesIO
-from xhtml2pdf import pisa # type: ignore
-=======
-from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file  # type: ignore
-import sqlite3
-from io import BytesIO
-from xhtml2pdf import pisa  # type: ignore
->>>>>>> ca0b16c (Your update message here)
+from xhtml2pdf import pisa
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_should_be_strong_and_secret'
@@ -87,7 +80,7 @@ def login():
         else:
             error = "Username and password are required."
 
-    return render_template('login.html', error=error)  # <- updated to lowercase
+    return render_template('login.html', error=error)
 
 @app.route('/dashboard')
 def dashboard():
@@ -357,10 +350,7 @@ def download_receipt(id):
 
     return send_file(pdf, as_attachment=True, download_name="receipt.pdf", mimetype='application/pdf')
 
-<<<<<<< HEAD
 
-=======
->>>>>>> ca0b16c (Your update message here)
 if __name__ == "__main__":
     init_db()
     app.run(debug=True)
