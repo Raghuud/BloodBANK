@@ -2,19 +2,16 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'blood-bank-management'
-        CONTAINER_NAME = 'blood-bank-prod-5019'
-        HOST_PORT = '5019'
+        IMAGE_NAME = 'blood-bank-system'
+        CONTAINER_NAME = 'blood-bank-container'
+        HOST_PORT = '5018'
         CONTAINER_PORT = '5000'
-        GIT_REPO = 'https://github.com/Raghuud/BloodBANK.git'
-        GIT_BRANCH = 'main'
     }
 
     stages {
         stage('Clone Repo') {
             steps {
                 echo 'Cloning repository...'
-                git branch: "${GIT_BRANCH}", url: "${GIT_REPO}"
             }
         }
 
@@ -35,7 +32,7 @@ pipeline {
             }
         }
 
-        stage('Run Container on Port 5019') {
+        stage('Run Docker Container') {
             steps {
                 script {
                     sh """
