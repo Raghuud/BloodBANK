@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Clone from GitHub') {
             steps {
-                git 'https://github.com/Raghuud/BloodBANK.git'
+                git branch: 'main', url: 'https://github.com/Raghuud/BloodBANK.git'
             }
         }
 
