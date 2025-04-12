@@ -2,23 +2,24 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'blood-bank-app'
-        CONTAINER_NAME = 'blood-bank-container'
-        PORT = '5000'
+        IMAGE_NAME = 'blood-bank-management'
+        CONTAINER_NAME = 'blood-bank-prod-5019'
+        HOST_PORT = '5019'
+        CONTAINER_PORT = '5000'
     }
 
     stages {
-        stage('Clone from GitHub') {
+        stage('Clone Repo') {
             steps {
-                git branch: 'main', url: 'https://github.com/Raghuud/BloodBANK.git'
+                echo 'Cloning repository...'
+                // Jenkins will clone the repo automatically if using pipeline from SCM
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    echo "🛠️ Building Docker image: ${IMAGE_NAME}"
-                    sh "docker build -t ${IMAGE_NAME} ."
+                    sh "docker build -t $IMAGE_NAME ."
                 }
             }
         }
@@ -26,28 +27,29 @@ pipeline {
         stage('Stop & Remove Old Container') {
             steps {
                 script {
-                    echo "🧹 Cleaning up any existing container: ${CONTAINER_NAME}"
-                    sh "docker rm -f ${CONTAINER_NAME} || true"
+                    sh "docker stop $CONTAINER_NAME || true"
+                    sh "docker rm $CONTAINER_NAME || true"
                 }
             }
         }
 
-        stage('Run New Container') {
+        stage('Run Container on Port 5019') {
             steps {
                 script {
-                    echo "🚀 Running new container on port ${PORT}"
-                    sh "docker run -d -p ${PORT}:${PORT} --name ${CONTAINER_NAME} ${IMAGE_NAME}"
+                    sh """
+                        docker run -d \
+                        --name $CONTAINER_NAME \
+                        -p $HOST_PORT:$CONTAINER_PORT \
+                        $IMAGE_NAME
+                    """
                 }
             }
         }
     }
 
     post {
-        success {
-            echo '✅ Build and deployment successful!'
-        }
-        failure {
-            echo '❌ Build failed. Check logs.'
+        always {
+            echo 'Pipeline completed.'
         }
     }
 }
