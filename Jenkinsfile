@@ -3,6 +3,8 @@ pipeline {
 
     environment {
         IMAGE_NAME = "bloodbank_app"
+        IMAGE_TAG = "v1"
+        FULL_IMAGE_NAME = "${IMAGE_NAME}:${IMAGE_TAG}"
         CONTAINER_NAME = "bloodbank_container"
     }
 
@@ -13,11 +15,19 @@ pipeline {
             }
         }
 
+        stage('Cleanup Old Container (Optional)') {
+            steps {
+                script {
+                    sh "docker rm -f $CONTAINER_NAME || true"
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker version'  // To verify Docker is accessible
-                    sh "docker build -t $IMAGE_NAME ."
+                    sh 'docker version' // Verify Docker works
+                    sh "docker build -t $FULL_IMAGE_NAME ."
                 }
             }
         }
@@ -25,10 +35,7 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    // Stop and remove existing container if any
-                    sh "docker rm -f $CONTAINER_NAME || true"
-                    // Run container
-                    sh "docker run -d -p 5000:5000 --name $CONTAINER_NAME $IMAGE_NAME"
+                    sh "docker run -d -p 5000:5000 --name $CONTAINER_NAME $FULL_IMAGE_NAME"
                 }
             }
         }
