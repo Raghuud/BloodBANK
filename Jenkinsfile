@@ -6,13 +6,15 @@ pipeline {
         CONTAINER_NAME = 'blood-bank-prod-5019'
         HOST_PORT = '5019'
         CONTAINER_PORT = '5000'
+        GIT_REPO = 'https://github.com/Raghuud/BloodBANK.git'
+        GIT_BRANCH = 'main'
     }
 
     stages {
         stage('Clone Repo') {
             steps {
                 echo 'Cloning repository...'
-                // Jenkins will clone the repo automatically if using pipeline from SCM
+                git branch: "${GIT_BRANCH}", url: "${GIT_REPO}"
             }
         }
 
