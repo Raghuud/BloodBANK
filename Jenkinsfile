@@ -32,12 +32,12 @@ pipeline {
             }
         }
 
-       stage('Run Docker Container') {
-    steps {
-        script {
-            sh '''
-                docker run -d --name bloodbank_container -p 5000:5000 bloodbank_app:v1
-            '''
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    sh "docker run -d -p 5000:5000 --name $CONTAINER_NAME $FULL_IMAGE_NAME"
+                }
+            }
         }
     }
 }
