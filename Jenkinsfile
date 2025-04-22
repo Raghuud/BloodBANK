@@ -15,9 +15,21 @@ pipeline {
             }
         }
 
+        stage('Check Docker Access') {
+            steps {
+                script {
+                    echo "Checking Docker access..."
+                    sh 'whoami'
+                    sh 'groups'
+                    sh 'docker version || echo "Docker not accessible"'
+                }
+            }
+        }
+
         stage('Cleanup Old Container (Optional)') {
             steps {
                 script {
+                    echo "Trying to remove old container..."
                     sh "docker rm -f $CONTAINER_NAME || true"
                 }
             }
@@ -26,7 +38,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker version' // Verify Docker works
+                    echo "Building Docker image: $FULL_IMAGE_NAME"
                     sh "docker build -t $FULL_IMAGE_NAME ."
                 }
             }
@@ -35,8 +47,8 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    sh 'docker run -d -p 5001:5000 --name bloodbank_container bloodbank_app:v1'
-
+                    echo "Running Docker container: $CONTAINER_NAME"
+                    sh "docker run -d -p 5001:5000 --name $CONTAINER_NAME $FULL_IMAGE_NAME"
                 }
             }
         }
